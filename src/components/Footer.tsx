@@ -83,11 +83,11 @@ const Footer = () => {
                 </span>
               </li>
               <li className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-[var(--color-primary)] shrink-0" />
+                <Phone className="h-5 w-5 text-[var(--color-white)] shrink-0" />
                 <span className="text-[var(--color-gray-400)]">+91 7780662464</span>
               </li>
               <li className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-[var(--color-primary)] shrink-0" />
+                <Mail className="h-5 w-5 text-[var(--color-white)] shrink-0" />
                 <span className="text-[var(--color-gray-400)]">sales@recursivepareto.com</span>
               </li>
             </ul>
