@@ -1,0 +1,20 @@
+:root {
+  --color-primary: #00225a;
+  --color-secondary: #0914e296;
+  --color-accent: #0b1bfc73;
+  --color-accent-foreground: #fefefe;
+  --color-white: #ffffff;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-black: #000000;
+
+  /* Contact Section Colors */
+  --contact-bg-gradient: #00225a;
+  --contact-text-color: var(--color-white);
+  --contact-button-bg: var(--color-white);
+  --contact-button-text: var(--color-primary);
+  --contact-button-hover-bg: rgba(255, 255, 255, 0.9);
+  --contact-overlay: url('https://grainy-gradients.vercel.app/noise.svg');
+  --contact-overlay-opacity: 0.2;
+}
