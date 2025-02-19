@@ -23,10 +23,10 @@ const Index = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section id="home" className="flex flex-col lg:flex-row items-center justify-between relative text-center lg:text-left">
+      <section id="home" className="flex flex-col lg:flex-row items-center mt-10 justify-between relative text-center lg:text-left">
         <div className="absolute inset-0 -z-10" />
         <div className="absolute inset-0 bg-white/30 backdrop-blur-[100px] -z-10" />
-        <div className="max-w-2xl mt-24 lg:ml-36">
+        <div className="max-w-2xl mt-16 lg:ml-36">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -71,7 +71,7 @@ const Index = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            src="https://www.focussoftnet.com/industries-all-images/focus-manufacturing-banner-2024-01.webp"
+            src="/image.png"
             alt="Hero Image"
             className="w-full h-full object-cover rounded-lg"
             style={{width: "500px"}}
@@ -119,7 +119,7 @@ const Index = () => {
               transition={{ duration: 0.5, delay: 0.8 }}
               className="mt-6 text-lg text-[var(--color-gray-800)] font-medium"
             >
-              Our mission is to <span className="font-semibold text-[var(--color-primary)]">empower businesses</span> 
+              Our mission is to <span className="font-semibold text-[var(--color-primary)]">empower businesses </span>   
               with innovative technology solutions that drive growth, enhance productivity, and improve 
               customer engagement.
             </motion.p>
