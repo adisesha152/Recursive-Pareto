@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Code, Rocket, Users, Zap, CheckCircle2, MessageSquare, ArrowRight as ArrowRightIcon, BrainCircuit, Timer, Target, BarChart3, Laptop, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowRight, Code, Rocket, Users, Zap, CheckCircle2, MessageSquare, ArrowRight as ArrowRightIcon, BrainCircuit, Timer, Target, BarChart3, Laptop, ChevronDown, ChevronUp, Heart, Star, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -19,7 +19,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-20">
       <Navbar />
       
       {/* Hero Section */}
@@ -58,10 +58,17 @@ const Index = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-wrap gap-4 justify-center lg:justify-start"
           >
-            <Button size="lg" className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:opacity-90 transition-all duration-300 shadow-lg">
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:opacity-90 transition-all duration-300 shadow-lg"
+            >
               Get Started <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button size="lg" variant="outline" className="backdrop-blur-sm bg-white/30 border-[var(--color-primary)]/20 hover:bg-white/50">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="backdrop-blur-sm bg-white/30 border-[var(--color-primary)]/20 hover:bg-white/50"
+            >
               Learn More
             </Button>
           </motion.div>
@@ -126,7 +133,7 @@ const Index = () => {
           </motion.div>
 
       {/* Services Section */}
-      <section id="services" className="p-10 relative mt-14">
+      {/* <section id="services" className="p-10 relative mt-14">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-accent)]/20 to-[var(--color-white)] -z-10" />
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
@@ -171,10 +178,10 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Projects Section */}
-      <section id="projects" className="p-10 relative">
+      {/* <section id="projects" className="p-10 relative">
         <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-white)] via-[var(--color-accent)]/10 to-[var(--color-primary)]/5 -z-10" />
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -235,10 +242,10 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Process Section */}
-      <section id="process" className="p-10 relative">
+      {/* <section id="process" className="p-10 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-white)] via-[var(--color-accent)]/20 to-[var(--color-white)] -z-10" />
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -281,6 +288,61 @@ const Index = () => {
                 {index < process.length - 1 && (
                   <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-[2px] bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)]" />
                 )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section> */}
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="p-10 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/5 via-[var(--color-accent)]/10 to-[var(--color-secondary)]/5 -z-10" />
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent"
+            >
+              Recent Client Stories
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-[var(--color-gray-600)] max-w-2xl mx-auto"
+            >
+              Feedback from our Esteemed Clients
+            </motion.p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={testimonial.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="glass-card rounded-xl p-6 relative"
+              >
+                <MessageSquare className="h-8 w-8 text-[var(--color-primary)]/20 absolute top-6 right-6" />
+                <p className="text-[var(--color-gray-600)] mb-6 italic">"{testimonial.quote}"</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full overflow-hidden">
+                    <img
+                      src={testimonial.avatar}
+                      alt={testimonial.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">{testimonial.name}</h4>
+                    <p className="text-sm text-[var(--color-gray-600)]">{testimonial.position}</p>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -364,8 +426,10 @@ const Index = () => {
         </div>
       </section>
 
+      
+
       {/* FAQ Section */}
-      <section id="faq" className="p-10 relative overflow-hidden">
+      {/* <section id="faq" className="p-10 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-white)] via-[var(--color-accent)]/20 to-[var(--color-white)] -z-10" />
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -388,9 +452,9 @@ const Index = () => {
               Find answers to common questions about our services and solutions
             </motion.p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8"> */}
             {/* Left Column */}
-            <div className="space-y-8">
+            {/* <div className="space-y-8">
               {faqs.slice(0, 3).map((faq, index) => (
                 <motion.div
                   key={faq.question}
@@ -419,10 +483,10 @@ const Index = () => {
                   </AnimatePresence>
                 </motion.div>
               ))}
-            </div>
+            </div> */}
 
             {/* Right Column */}
-            <div className="space-y-8">
+            {/* <div className="space-y-8">
               {faqs.slice(3, 6).map((faq, index) => {
                 const originalIndex = index + 3; // Adjust index for right column
                 return (
@@ -457,65 +521,12 @@ const Index = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="p-10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/5 via-[var(--color-accent)]/10 to-[var(--color-secondary)]/5 -z-10" />
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent"
-            >
-              Client Testimonials
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-[var(--color-gray-600)] max-w-2xl mx-auto"
-            >
-              What our clients say about working with us
-            </motion.p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={testimonial.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card rounded-xl p-6 relative"
-              >
-                <MessageSquare className="h-8 w-8 text-[var(--color-primary)]/20 absolute top-6 right-6" />
-                <p className="text-[var(--color-gray-600)] mb-6 italic">"{testimonial.quote}"</p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full overflow-hidden">
-                    <img
-                      src={testimonial.avatar}
-                      alt={testimonial.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold">{testimonial.name}</h4>
-                    <p className="text-sm text-[var(--color-gray-600)]">{testimonial.position}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       {/* About Us Section */}
-      <section id="about" className="p-10 crelative overflow-hidden">
+      {/* <section id="about" className="p-10 crelative overflow-hidden">
         <div className="flex justify-center">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
@@ -610,6 +621,68 @@ const Index = () => {
                   From software developers to project managers, each member of our team brings unique skills and expertise to the table, ensuring that we can tackle any challenge and deliver exceptional results.
                 </p>
               </div>
+            </motion.div>
+          </div>
+        </div>
+      </section> */}
+
+        {/* Values Section */}
+      <section id="values" className="p-10 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-white)] via-[var(--color-accent)]/10 to-[var(--color-primary)]/5 -z-10" />
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent"
+            >
+              Our Values
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-[var(--color-gray-600)] max-w-2xl mx-auto"
+            >
+              The core principles that guide our work and define our company culture.
+            </motion.p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+              className="glass-card p-6 text-center rounded-xl shadow-lg hover:shadow-2xl transition-all"
+            >
+              <Heart size={48} className="text-[var(--color-primary)] mx-auto mb-4" />
+              <h3>Passion</h3>
+              <p>We are passionate about technology and innovation.</p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+              className="glass-card p-6 text-center rounded-xl shadow-lg hover:shadow-2xl transition-all"
+            >
+              <Star size={48} className="text-[var(--color-primary)] mx-auto mb-4" />
+              <h3>Excellence</h3>
+              <p>We strive for excellence in everything we do.</p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+              className="glass-card p-6 text-center rounded-xl shadow-lg hover:shadow-2xl transition-all"
+            >
+              <Globe size={48} className="text-[var(--color-primary)] mx-auto mb-4" />
+              <h3>Integrity</h3>
+              <p>We conduct our business with the highest level of integrity.</p>
             </motion.div>
           </div>
         </div>

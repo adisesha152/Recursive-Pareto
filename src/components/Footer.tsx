@@ -1,8 +1,15 @@
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <footer className="bg-[var(--color-gray-800)] text-[var(--color-white)]">
@@ -36,16 +43,62 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              {["Home", "Services", "Projects", "About Us", "Contact"].map((link) => (
-                <li key={link}>
-                  <a
-                    href={`#${link.toLowerCase().replace(" ", "-")}`}
-                    className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <button
+                  onClick={() => handleNavigation('/')}
+                  className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
+                >
+                  Home
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNavigation('/services')}
+                  className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
+                >
+                  Services
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNavigation('/projects')}
+                  className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
+                >
+                  Projects
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNavigation('/investors')}
+                  className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
+                >
+                  Investors
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNavigation('/careers')}
+                  className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
+                >
+                  Careers
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNavigation('/about')}
+                  className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
+                >
+                  About Us
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNavigation('/contact')}
+                  className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
+                >
+                  Contact Us
+                </button>
+              </li>
             </ul>
           </div>
 
