@@ -5,8 +5,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useState } from "react";
 import "../styles/globals.css";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
@@ -18,6 +20,14 @@ const Index = () => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
   };
 
+  const handleGetStarted = () => {
+    navigate('/contact');
+  };
+
+  const handleLearnMore = () => {
+    navigate('/about');
+  };
+
   return (
     <div className="min-h-screen pt-20">
       <Navbar />
@@ -26,7 +36,7 @@ const Index = () => {
       <section id="home" className="flex flex-col lg:flex-row items-center mt-10 justify-between relative text-center lg:text-left">
         <div className="absolute inset-0 -z-10" />
         <div className="absolute inset-0 bg-white/30 backdrop-blur-[100px] -z-10" />
-        <div className="max-w-2xl mt-16 lg:ml-36">
+        <div className="max-w-2xl mt-16 lg:ml-28">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -61,6 +71,7 @@ const Index = () => {
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:opacity-90 transition-all duration-300 shadow-lg"
+              onClick={handleGetStarted}
             >
               Get Started <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -68,12 +79,13 @@ const Index = () => {
               size="lg" 
               variant="outline" 
               className="backdrop-blur-sm bg-white/30 border-[var(--color-primary)]/20 hover:bg-white/50"
+              onClick={handleLearnMore}
             >
               Learn More
             </Button>
           </motion.div>
         </div>
-        <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
+        <div className="w-full lg:w-1/2 mt-8 lg:mt-0 flex justify-center">
           <motion.img
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -689,10 +701,10 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="md:p-10 relative overflow-hidden md:mb-10">
-        <div className="absolute inset-0 bg-[var(--contact-bg-gradient)] max-w-6xl md:ml-36 sm:m md:rounded-3xl sm:rounded-none -z-10" />
+      <section id="contact" className="py-16 px-4 lg:mb-10 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[var(--contact-bg-gradient)] md:rounded-none lg:max-w-6xl mx-auto lg:rounded-3xl -z-10" />
         <div className="absolute inset-0 bg-[var(--contact-overlay)] opacity-[var(--contact-overlay-opacity)]" />
-        <div className="md:max-w-6xl md:mx-auto text-center relative p-10 w- sm:w- md:w-10/12 lg:w-8/12 xl:w-6/12">
+        <div className="relative max-w-2xl mx-auto text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -707,7 +719,7 @@ const Index = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-[var(--contact-text-color)] mb-6 md:mb-8 max-w-2xl mx-auto text-base md:text-lg"
+            className="text-[var(--contact-text-color)] mb-6 md:mb-8 text-base md:text-lg"
           >
             Contact us today to discuss how we can help you achieve your business goals
             through innovative software solutions.

@@ -52,10 +52,10 @@ const Navbar = () => {
         className="fixed top-0 left-0 right-0 z-[49]"
       >
         {/* Main Navbar Container */}
-        <div className="bg-gradient-to-b from-white/80 to-white/60 backdrop-blur-xl border-b border-white/20 md:shadow-lg">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 md:h-24 relative"> {/* Added relative */}
-            <div className="flex items-center justify-between h-full"> {/* Changed to h-full */}
-              {/* Logo - Updated animation condition */}
+        <div className="bg-gradient-to-b from-white/80 to-white/60 backdrop-blur-xl border-b border-white/20 xl:shadow-lg">
+          <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 h-20 xl:h-20 relative">
+            <div className="flex items-center justify-between h-full">
+              {/* Logo - Updated to use image */}
               <motion.div 
                 className="flex items-center"
                 animate={{ 
@@ -64,13 +64,17 @@ const Navbar = () => {
                 }}
                 transition={{ duration: 0.3 }}
               >
-                <Link to="/" className="text-xl font-bold text-[var(--color-primary)]">
-                  RecursivePareto
+                <Link to="/" className="flex items-center">
+                  <img 
+                    src="/assets/logo-no-background.png" 
+                    alt="RecursivePareto Logo" 
+                    className="h-8 w-auto"
+                  />
                 </Link>
               </motion.div>
 
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-4">
+              {/* Desktop Navigation - Only show on extra large screens */}
+              <div className="hidden xl:flex items-center space-x-4">
                 {navItems.map((item) => (
                   <div
                     key={item.name}
@@ -106,11 +110,11 @@ const Navbar = () => {
                 </Button>
               </div>
 
-              {/* Mobile menu button */}
-              <div className="md:hidden flex items-center"> {/* Added items-center */}
+              {/* Mobile/Tablet menu button - Updated consistent sizing */}
+              <div className="xl:hidden">
                 <button
                   onClick={() => setIsOpen(!isOpen)}
-                  className="p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+                  className="p-2 w-12 h-12 rounded-lg text-gray-600 hover:bg-gray-100 touch-none flex items-center justify-center"
                 >
                   {isOpen ? 
                     <X className="h-8 w-8" strokeWidth={1.5} /> : 
@@ -120,12 +124,12 @@ const Navbar = () => {
               </div>
             </div>
             
-            {/* Mobile Border Line */}
-            <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-200 md:hidden" />
+            {/* Mobile Border Line - Only visible on mobile/tablet */}
+            <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-200 xl:hidden" />
           </div>
         </div>
 
-        {/* Full-width Dropdown */}
+        {/* Full-width Dropdown - Only show on extra large screens */}
         <AnimatePresence>
           {shouldShowDropdown(dropdownOpen as string) && (
             <motion.div
@@ -133,7 +137,7 @@ const Navbar = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="hidden md:block w-full bg-white/95 backdrop-blur-xl shadow-lg border-b border-white/20"
+              className="hidden xl:block w-full bg-white/95 backdrop-blur-xl shadow-lg border-b border-white/20"
             >
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="grid grid-cols-4 gap-8">
@@ -183,7 +187,7 @@ const Navbar = () => {
         </AnimatePresence>
       </motion.nav>
 
-      {/* Mobile Navigation Overlay */}
+      {/* Mobile/Tablet Navigation Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -191,22 +195,26 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[50] bg-white md:hidden flex flex-col"
+            className="fixed inset-0 z-[50] bg-white xl:hidden flex flex-col"
           >
-            {/* Mobile Header  */}
-            <div className="flex items-center justify-between p-4 border-b">
-              <Link to="/" className="text-xl font-bold text-[var(--color-primary)]">
-                RecursivePareto
+            {/* Mobile/Tablet Header with larger touch targets */}
+            <div className="flex items-center justify-between p-4 h-20 border-b">
+              <Link to="/" className="flex items-center">
+                <img 
+                  src="/assets/logo-no-background.png" 
+                  alt="RecursivePareto Logo" 
+                  className="h-8 w-auto"
+                />
               </Link>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+                className="p-2 w-12 h-12 rounded-lg text-gray-600 hover:bg-gray-100 touch-none flex items-center justify-center"
               >
-                <X className="h-8 w-8" strokeWidth={1.5} />
+                <X className="h-6 w-6" strokeWidth={1.5} />
               </button>
             </div>
 
-            {/* Mobile Menu Content */}
+            {/* Mobile/Tablet Menu Content with larger touch targets for iPad Pro */}
             <div className="flex-1 relative">
               <motion.div
                 initial={{ x: 0 }}
@@ -214,23 +222,23 @@ const Navbar = () => {
                 transition={{ duration: 0.3 }}
                 className="absolute inset-0 overflow-y-auto"
               >
-                <div className="space-y-1">
+                <div className="space-y-2 p-4">
                   {navItems
                     .filter(item => !item.mobileHidden)
                     .map((item) => (
                     <div key={item.name} className="relative">
                       {item.dropdown ? (
                         <div
-                          className="flex justify-between items-center px-3 py-4 text-base font-medium text-[var(--color-gray-700)] hover:text-[var(--color-primary)]"
+                          className="flex justify-between items-center px-6 py-5 text-lg font-medium text-[var(--color-gray-700)] hover:text-[var(--color-primary)] touch-none rounded-xl hover:bg-gray-50"
                           onClick={() => setActiveSubmenu(item.name)}
                         >
                           {item.name}
-                          <ArrowRight className="h-4 w-4" />
+                          <ArrowRight className="h-6 w-6" />
                         </div>
                       ) : (
                         <Link
                           to={item.href}
-                          className="block px-3 py-4 text-base font-medium text-[var(--color-gray-700)] hover:text-[var(--color-primary)]"
+                          className="block px-6 py-5 text-lg font-medium text-[var(--color-gray-700)] hover:text-[var(--color-primary)] rounded-xl hover:bg-gray-50"
                           onClick={() => setIsOpen(false)}
                         >
                           {item.name}
@@ -241,7 +249,7 @@ const Navbar = () => {
                 </div>
               </motion.div>
 
-              {/* Submenu */}
+              {/* Submenu with larger touch targets */}
               <AnimatePresence>
                 {activeSubmenu && (
                   <motion.div
@@ -251,20 +259,20 @@ const Navbar = () => {
                     transition={{ duration: 0.3 }}
                     className="absolute inset-0 bg-white overflow-y-auto"
                   >
-                    <div className="px-4 py-6">
+                    <div className="p-4">
                       <div
-                        className="flex items-center gap-2 px-3 py-2 text-[var(--color-primary)] font-medium mb-4"
+                        className="flex items-center gap-2 px-4 py-4 text-[var(--color-primary)] font-medium mb-2 touch-none"
                         onClick={() => setActiveSubmenu(null)}
                       >
-                        <ArrowLeft className="h-4 w-4" />
+                        <ArrowLeft className="h-5 w-5" />
                         Back to Menu
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         {navItems.find(item => item.name === activeSubmenu)?.dropdown?.map((subItem) => (
                           <Link
                             key={subItem}
                             to="#"
-                            className="block px-3 py-3 text-base font-medium text-[var(--color-gray-700)] hover:bg-[var(--color-primary)]/5 rounded-md"
+                            className="block px-4 py-4 text-base font-medium text-[var(--color-gray-700)] hover:bg-[var(--color-primary)]/5 rounded-md"
                             onClick={() => {
                               setActiveSubmenu(null);
                               setIsOpen(false);
@@ -280,26 +288,25 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
               
-            {/* Bottom Buttons */}
-            <div className="px-4 py-4 border-t border-gray-200">
+            {/* Bottom Buttons - Updated for smaller mobile sizes */}
+            <div className="px-8 py-6 border-t border-gray-200">
               <div className="grid grid-cols-2 gap-4">
-                <Link to="/investors" className="block">
-                  <Button 
-                    className="w-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] 
-                               hover:bg-[var(--color-primary)]/20 border-2 border-[var(--color-primary)]"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Investors
-                  </Button>
-                </Link>
-                <Link to="/contact" className="block">
-                  <Button 
-                    className="w-full bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/90"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Contact Us
-                  </Button>
-                </Link>
+                <Button 
+                  className="w-full py-4 text-base sm:text-lg bg-[var(--color-primary)]/10 text-[var(--color-primary)] 
+                            hover:bg-[var(--color-primary)]/20 border-2 border-[var(--color-primary)]
+                            flex items-center justify-center h-[50px] sm:h-[60px]"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Investors
+                </Button>
+                <Button 
+                  className="w-full py-4 text-base sm:text-lg bg-[var(--color-primary)] text-white 
+                            hover:bg-[var(--color-primary)]/90
+                            flex items-center justify-center h-[50px] sm:h-[60px]"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Contact Us
+                </Button>
               </div>
             </div>
           </motion.div>

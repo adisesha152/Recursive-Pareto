@@ -16,9 +16,15 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
-          {/* Company Info */}
+          {/* Company Info - Updated logo styling */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-[var(--color-white)] mb-4">RecursivePareto</h3>
+            <Link to="/" className="block">
+              <img 
+                src="/assets/logo-white-no-background.png" 
+                alt="RecursivePareto Logo" 
+                className="w-auto h-8 opacity-90 hover:opacity-100 transition-opacity"
+              />
+            </Link>
             <p className="text-[var(--color-gray-400)]">
               Empowering businesses with innovative software solutions that drive growth
               and digital transformation.
