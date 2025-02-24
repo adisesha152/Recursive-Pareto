@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -32,6 +32,7 @@ const Navbar = () => {
   const [navExpanded, setNavExpanded] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const shouldShowDropdown = (itemName: string) => {
     return (itemName === "Services" || itemName === "Projects") && dropdownOpen === itemName;
@@ -44,6 +45,11 @@ const Navbar = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
+
+  const handleGetStarted = () => {
+    navigate('/contact');
+    setIsOpen(false); // Close mobile menu if open
+  };
 
   return (
     <>
@@ -105,7 +111,11 @@ const Navbar = () => {
                     </Link>
                   </div>
                 ))}
-                <Button size="sm" className="bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90">
+                <Button 
+                  size="sm" 
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90"
+                  onClick={handleGetStarted}
+                >
                   Get Started
                 </Button>
               </div>
@@ -295,7 +305,10 @@ const Navbar = () => {
                   className="w-full py-4 text-base sm:text-lg bg-[var(--color-primary)]/10 text-[var(--color-primary)] 
                             hover:bg-[var(--color-primary)]/20 border-2 border-[var(--color-primary)]
                             flex items-center justify-center h-[50px] sm:h-[60px]"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    navigate('/investors');
+                    setIsOpen(false);
+                  }}
                 >
                   Investors
                 </Button>
@@ -303,7 +316,7 @@ const Navbar = () => {
                   className="w-full py-4 text-base sm:text-lg bg-[var(--color-primary)] text-white 
                             hover:bg-[var(--color-primary)]/90
                             flex items-center justify-center h-[50px] sm:h-[60px]"
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleGetStarted}
                 >
                   Contact Us
                 </Button>
