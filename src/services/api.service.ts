@@ -1,69 +1,71 @@
-// import axios from 'axios';
-// import type * as API from '../types/api.types';
+import axios from "axios";
 
-// const BASE_URL = process.env.REACT_APP_API_URL || 'https://api.recursivepareto.com';
+const API_BASE_URL = "http://localhost:3000/api"; // Replace with your actual Firebase function URL
+const CONTACT_FORM_API = 'https://us-central1-recursivepareto-47a4d.cloudfunctions.net/sendContactFormNotification';
+const apiService = {
+  // Get all documents from a collection
+  getAll: async (collection: string) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/${collection}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching ${collection}:`, error);
+      throw error;
+    }
+  },
 
-// const apiClient = axios.create({
-//   baseURL: BASE_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-// });
+  // Get a single document by ID
+  getById: async (collection: string, id: string) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/${collection}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching ${collection} by ID:`, error);
+      throw error;
+    }
+  },
 
-// export const ApiService = {
-//   // Hero Section
-//   getHeroData: async (): Promise<API.ApiResponse<API.HeroData>> => {
-//     const response = await apiClient.get('/hero');
-//     return response.data;
-//   },
+  // Create a new document
+  create: async (collection: string, data: any) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/${collection}`, data);
+      return response.data;
+    } catch (error) {
+      console.error(`Error creating ${collection}:`, error);
+      throw error;
+    }
+  },
 
-//   // Services
-//   getServices: async (params?: API.QueryParams): Promise<API.ApiResponse<API.Service[]>> => {
-//     const response = await apiClient.get('/services', { params });
-//     return response.data;
-//   },
+  // Update an existing document
+  update: async (collection: string, id: string, data: any) => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/${collection}/${id}`, data);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating ${collection}:`, error);
+      throw error;
+    }
+  },
 
-//   // Projects
-//   getProjects: async (params?: API.QueryParams): Promise<API.ApiResponse<API.Project[]>> => {
-//     const response = await apiClient.get('/projects', { params });
-//     return response.data;
-//   },
+  // Delete a document
+  delete: async (collection: string, id: string) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/${collection}/${id}`);
+    } catch (error) {
+      console.error(`Error deleting ${collection}:`, error);
+      throw error;
+    }
+  }
+};
 
-//   // Testimonials
-//   getTestimonials: async (params?: API.QueryParams): Promise<API.ApiResponse<API.Testimonial[]>> => {
-//     const response = await apiClient.get('/testimonials', { params });
-//     return response.data;
-//   },
-
-//   // Team Members
-//   getTeamMembers: async (params?: API.QueryParams): Promise<API.ApiResponse<API.TeamMember[]>> => {
-//     const response = await apiClient.get('/team', { params });
-//     return response.data;
-//   },
-
-//   // Career/Jobs
-//   getJobOpenings: async (params?: API.QueryParams): Promise<API.ApiResponse<API.JobOpening[]>> => {
-//     const response = await apiClient.get('/careers', { params });
-//     return response.data;
-//   },
-
-//   // Contact Form
-//   submitContactForm: async (data: API.ContactFormData): Promise<API.ApiResponse<void>> => {
-//     const response = await apiClient.post('/contact', data);
-//     return response.data;
-//   },
-
-//   // Company Info
-//   getCompanyInfo: async (): Promise<API.ApiResponse<API.CompanyInfo>> => {
-//     const response = await apiClient.get('/company');
-//     return response.data;
-//   },
-
-//   // Investors
-//   getInvestors: async (params?: API.QueryParams): Promise<API.ApiResponse<API.InvestorData[]>> => {
-//     const response = await apiClient.get('/investors', { params });
-//     return response.data;
-//   },
-// };
-
-// export default ApiService;
+const sendContact=async (data:any) =>{
+    try {
+       const res =  await axios.post(CONTACT_FORM_API,data);
+        return res;
+    } catch (error) {
+        console.error(`Error sending notification : `, error);
+        
+    }
+}
+export {sendContact};
+export default apiService;

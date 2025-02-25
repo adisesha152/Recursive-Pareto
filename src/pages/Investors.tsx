@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { DollarSign, TrendingUp, Shield, ChartBar, Users, Globe } from 'lucide-react';
+import { useInvestors } from '@/hooks/useInvestors';
 
 const keyInvestors = [
   {
@@ -38,6 +39,21 @@ const metrics = [
 ];
 
 const Investors = () => {
+  const [keyInvestors,setInvestors] = useState([]);
+  const {getAll} = useInvestors();
+  useEffect(()=>{
+    const getInvestor =async ()=>{
+      try {
+        const data = await getAll();
+        setInvestors(data);
+        console.log(data);
+        
+      } catch (error) {
+        console.error("Error::", error);
+        
+      }
+    };getInvestor();
+  },[])
   return (
     <div className="min-h-screen pt-16">
       <Navbar />
@@ -128,7 +144,7 @@ const Investors = () => {
               >
                 Our Key Investors
               </motion.h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+             { keyInvestors && <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {keyInvestors.map((investor, index) => (
                   <motion.div
                     key={investor.name}
@@ -155,7 +171,7 @@ const Investors = () => {
                     </div>
                   </motion.div>
                 ))}
-              </div>
+              </div>}
             </div>
           </section>
 

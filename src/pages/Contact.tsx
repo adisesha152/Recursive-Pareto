@@ -1,11 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { sendContact } from '@/services/api.service';
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    companyName: '',
+    email: '',
+    phoneNumber: '',
+    message: '',
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState('');
+
+  // Handle form input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setResponseMessage('');
+
+    try {
+      const response = await sendContact(formData);
+      setResponseMessage('Message sent successfully!');
+      setFormData({ fullName: '', companyName: '', email: '', phoneNumber: '', message: '' });
+    } catch (error) {
+      setResponseMessage('Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen pt-16">
       <Navbar />
@@ -33,7 +67,7 @@ const Contact = () => {
             </motion.p>
           </div>
           <div className="glass-card rounded-xl p-8 shadow-lg mb-12">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="block text-[var(--color-gray-700)] text-sm font-bold mb-2" htmlFor="fullName">
                   Full Name
@@ -41,8 +75,25 @@ const Contact = () => {
                 <input
                   type="text"
                   id="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  required
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--color-gray-700)] leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Full Name"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-[var(--color-gray-700)] text-sm font-bold mb-2" htmlFor="companyName">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  id="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  required
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--color-gray-700)] leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="Company Name"
                 />
               </div>
               <div className="mb-4">
@@ -52,8 +103,25 @@ const Contact = () => {
                 <input
                   type="email"
                   id="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--color-gray-700)] leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Email"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-[var(--color-gray-700)] text-sm font-bold mb-2" htmlFor="phoneNumber">
+                  Phone number
+                </label>
+                <input
+                  type="text"
+                  id="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  required
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--color-gray-700)] leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="+91-9999999999"
                 />
               </div>
               <div className="mb-4">
@@ -62,62 +130,24 @@ const Contact = () => {
                 </label>
                 <textarea
                   id="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--color-gray-700)] leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Your message"
                 />
               </div>
               <div className="flex items-center justify-between">
-                <Button type="submit" className="bg-[var(--color-primary)] text-[var(--color-white)] py-2 px-4 rounded">
-                  Send Message
+                <Button type="submit" disabled={loading} className="bg-[var(--color-primary)] text-[var(--color-white)] py-2 px-4 rounded">
+                  {loading ? 'Sending...' : 'Send Message'}
                 </Button>
               </div>
+              {responseMessage && (
+                <p className={`mt-4 text-sm ${responseMessage.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
+                  {responseMessage}
+                </p>
+              )}
             </form>
-          </div>
-          <div className="text-center mb-12">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent"
-            >
-              Our Locations
-            </motion.h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="glass-card rounded-xl p-8 shadow-lg text-center"
-            >
-              <MapPin size={48} className="text-[var(--color-primary)] mb-4" />
-              <h3 className="text-xl font-semibold mb-2">New York</h3>
-              <p className="text-[var(--color-gray-600)]">123 Main Street, New York, NY 10001</p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="glass-card rounded-xl p-8 shadow-lg text-center"
-            >
-              <MapPin size={48} className="text-[var(--color-primary)] mb-4" />
-              <h3 className="text-xl font-semibold mb-2">San Francisco</h3>
-              <p className="text-[var(--color-gray-600)]">456 Market Street, San Francisco, CA 94111</p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="glass-card rounded-xl p-8 shadow-lg text-center"
-            >
-              <MapPin size={48} className="text-[var(--color-primary)] mb-4" />
-              <h3 className="text-xl font-semibold mb-2">London</h3>
-              <p className="text-[var(--color-gray-600)]">789 Oxford Street, London, UK W1D 2ES</p>
-            </motion.div>
           </div>
         </div>
       </section>
