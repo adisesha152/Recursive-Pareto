@@ -3,14 +3,29 @@ import { ArrowRight, Code, Rocket, Users, Zap, CheckCircle2, MessageSquare, Arro
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/globals.css";
 import { useNavigate } from "react-router-dom";
+import { useTestimonals } from "@/hooks/useTestimonals";
 
 const Index = () => {
+  const [testimonials,settestimonials] = useState([])
   const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+const {getAll} = useTestimonals();
+
+  useEffect(()=>{
+    const testimonial = async ()=>{
+      try {
+        const res = await getAll();
+        settestimonials(res)
+      } catch (error) {
+        console.error("Error Fetching the testimonials:" ,error);
+        
+      }
+    };testimonial();
+  },[])
 
   const handleGetInTouchClick = () => {
     setShowForm(true);

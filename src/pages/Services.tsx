@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Code, Zap, Laptop, BarChart3, Target, Cpu, Rocket, BrainCircuit, Cloud, Smartphone, Shield, Database } from 'lucide-react';
+import { useServices } from '@/hooks/useServices';
+import { Service } from '@/types/api.types';
+const iconMap = {
+  Laptop: <Laptop size={48} className="text-[var(--color-primary)] mb-4 mx-auto"  />,
 
+  Shield:<Shield size={48} className="text-[var(--color-primary)] mb-4 mx-auto" />
+};
 const services = [
   {
     icon: Code,
@@ -53,6 +59,27 @@ const services = [
 ];
 
 const Services = () => {
+   const [services, setServices] = useState([]);
+    const { getAll } = useServices();
+  
+    useEffect(() => {
+      const get = async () => {
+        try {
+          const data = await getAll() as Service[];
+          const finalData =  data.map((step) => {
+            console.log(step.icon, "Icon wala", iconMap[step.icon]);
+            
+            return ({
+            ...step,
+            icon: iconMap[step.icon] || null, // Convert icon string to component
+          })});
+          setServices(finalData); // ✅ Set fetched data to state
+        } catch (error) {
+          console.error("Error fetching projects:", error);
+        }
+      };
+      get();
+    }, []); 
   return (
     <div className="min-h-screen pt-16">
       <Navbar />
@@ -89,7 +116,7 @@ const Services = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="glass-card rounded-xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow"
               >
-                <service.icon size={48} className="text-[var(--color-primary)] mb-4 mx-auto" />
+                {service.icon}
                 <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
                 <p className="text-[var(--color-gray-600)]">{service.description}</p>
               </motion.div>

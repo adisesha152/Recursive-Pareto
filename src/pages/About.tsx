@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { CheckCircle2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTeam } from '@/hooks/useTeam';
 
 const aboutFeatures = [
   "10+ Years of Industry Experience",
@@ -48,6 +49,21 @@ const teamMembers = [
 ];
 
 const About = () => {
+  const [teamMembers,setTeam] = useState([]);
+  const {getAll} = useTeam();
+
+  useEffect(()=>{
+    const team = async () =>{
+      try {
+        const res = await getAll();
+        console.log(res);
+        setTeam(res)
+      } catch (error) {
+        console.error("error fetching Team : ",error);
+        
+      }
+    };team();
+  },[])
   return (
     <div className="min-h-screen pt-16">
       <Navbar />

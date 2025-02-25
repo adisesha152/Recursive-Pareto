@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Users, Briefcase, Award, Globe, Heart, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useJobs } from '@/hooks/useJobs';
 
 const jobOpenings = [
   {
@@ -67,12 +68,27 @@ const jobOpenings = [
 const ITEMS_PER_PAGE = 3;
 
 const Careers = () => {
+  const [jobOpenings,setjobs]= useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const {getAll} = useJobs();
   
   const totalPages = Math.ceil(jobOpenings.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentJobs = jobOpenings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
+useEffect(()=>{
+  const getJobs = async ()=>
+  {
+  try {
+    const res  = await getAll();
+    console.log(res);
+    setjobs(res)
+  } catch (error) {
+    console.error("Error fetching the Jobs");
+    
+  }
+  };
+  getJobs();
+},[])
   return (
     <div className="min-h-screen pt-16">
       <Navbar />
