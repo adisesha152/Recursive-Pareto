@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000/api"; // Replace with your actual Firebase function URL
+const API_BASE_URL = "https://api.recursivepareto.in/api"; // Replace with your actual Firebase function URL
 const CONTACT_FORM_API = 'https://us-central1-recursivepareto-47a4d.cloudfunctions.net/sendContactFormNotification';
+const JOB_APPLICATION_API = 'https://us-central1-recursivepareto-47a4d.cloudfunctions.net/sendContactFormNotification';
 const apiService = {
   // Get all documents from a collection
   getAll: async (collection: string) => {
@@ -67,5 +68,15 @@ const sendContact=async (data:any) =>{
         
     }
 }
-export {sendContact};
+
+const jobApplication=async (data:any) =>{
+    try {
+        const res = await axios.post(JOB_APPLICATION_API,data);
+        return res;
+    } catch (error) {
+        console.error(`Error applying for job ${error}`);
+        
+    }
+}
+export {sendContact,jobApplication};
 export default apiService;
