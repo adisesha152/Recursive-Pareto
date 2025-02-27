@@ -15,39 +15,6 @@ const aboutFeatures = [
   "Continuous Innovation & Learning",
 ];
 
-const teamMembers = [
-  {
-    name: "John Doe",
-    position: "CEO",
-    avatar: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
-  },
-  {
-    name: "Jane Smith",
-    position: "CTO",
-    avatar: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
-  },
-  {
-    name: "Alice Johnson",
-    position: "Lead Developer",
-    avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-  },
-  {
-    name: "Bob Brown",
-    position: "Project Manager",
-    avatar: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
-  },
-  {
-    name: "Eve Davis",
-    position: "UX/UI Designer",
-    avatar: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-  },
-  {
-    name: "Mike Davis",
-    position: "Quality Assurance",
-    avatar: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-  },
-];
-
 const About = () => {
   const [teamMembers,setTeam] = useState([]);
   const {getAll} = useTeam();
@@ -103,9 +70,9 @@ const About = () => {
             <p className="text-[var(--color-gray-600)] mb-6">
               Our team is composed of experienced professionals who are passionate about technology and innovation. We work collaboratively to deliver the best solutions for our clients.
             </p>
-            <Button className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:opacity-90">
+            {/* <Button className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:opacity-90">
               Learn More About Us <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            </Button> */}
           </div>
           <div className="glass-card rounded-xl p-8 shadow-lg mb-12">
             <h3 className="text-2xl font-semibold mb-4">Our Features</h3>

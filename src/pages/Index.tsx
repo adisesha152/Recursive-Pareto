@@ -48,7 +48,7 @@ const {getAll} = useTestimonals();
       <Navbar />
       
       {/* Hero Section */}
-      <section id="home" className="flex flex-col lg:flex-row items-center mt-10 justify-between relative text-center lg:text-left">
+      <section id="home" className="flex flex-col lg:flex-row items-center md:mt-10 justify-between relative text-center lg:text-left">
         <div className="absolute inset-0 -z-10" />
         <div className="absolute inset-0 bg-white/30 backdrop-blur-[100px] -z-10" />
         <div className="max-w-2xl mt-16 lg:ml-28">

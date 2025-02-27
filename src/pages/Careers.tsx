@@ -1,94 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Users, Briefcase, Award, Globe, Heart, Star } from 'lucide-react';
+import { Users, Briefcase, Award, Globe, Heart, Star, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useJobs } from '@/hooks/useJobs';
-
-const jobOpenings = [
-  {
-    title: "Software Engineer",
-    location: "New York, NY",
-    type: "Full-time",
-    description: "Develop and maintain web applications using modern technologies. Collaborate with cross-functional teams to deliver high-quality software solutions.",
-    requirements: ["3+ years of experience in software development", "Proficiency in React and Node.js", "Experience with AWS and MongoDB"],
-  },
-  {
-    title: "UX/UI Designer",
-    location: "San Francisco, CA",
-    type: "Full-time",
-    description: "Design user-friendly interfaces and create engaging user experiences. Work closely with developers and product managers to bring designs to life.",
-    requirements: ["2+ years of experience in UX/UI design", "Proficiency in design tools like Figma and Sketch", "Strong portfolio showcasing design skills"],
-  },
-  {
-    title: "Project Manager",
-    location: "London, UK",
-    type: "Full-time",
-    description: "Manage software development projects from inception to completion. Ensure projects are delivered on time, within scope, and within budget.",
-    requirements: ["5+ years of experience in project management", "Strong leadership and communication skills", "Experience with Agile methodologies"],
-  },
-  {
-    title: "DevOps Engineer",
-    location: "Remote",
-    type: "Full-time",
-    description: "Design and implement CI/CD pipelines, manage cloud infrastructure, and ensure system reliability.",
-    requirements: ["4+ years of DevOps experience", "AWS/Azure certification", "Terraform and Kubernetes expertise"],
-  },
-  {
-    title: "Data Scientist",
-    location: "Boston, MA",
-    type: "Full-time",
-    description: "Develop machine learning models and analyze complex data sets to drive business decisions.",
-    requirements: ["MS/PhD in related field", "Python, R, and SQL proficiency", "Experience with ML frameworks"],
-  },
-  {
-    title: "Frontend Developer",
-    location: "Berlin, Germany",
-    type: "Full-time",
-    description: "Build responsive and accessible web applications using modern frontend technologies.",
-    requirements: ["3+ years frontend experience", "React/Vue.js expertise", "Strong UI/UX skills"],
-  },
-  {
-    title: "Backend Developer",
-    location: "Amsterdam, NL",
-    type: "Full-time",
-    description: "Develop scalable backend services and APIs using modern technologies.",
-    requirements: ["4+ years backend experience", "Node.js/Python expertise", "Database design skills"],
-  },
-  {
-    title: "Mobile Developer",
-    location: "Singapore",
-    type: "Full-time",
-    description: "Create native mobile applications for iOS and Android platforms.",
-    requirements: ["3+ years mobile development", "React Native/Flutter", "App Store deployment experience"],
-  },
-];
 
 const ITEMS_PER_PAGE = 3;
 
 const Careers = () => {
-  const [jobOpenings,setjobs]= useState([]);
+  const [jobOpenings, setjobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const {getAll} = useJobs();
-  
+  const { getAll } = useJobs();
+  const [showApplyForm, setShowApplyForm] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+
   const totalPages = Math.ceil(jobOpenings.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentJobs = jobOpenings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-useEffect(()=>{
-  const getJobs = async ()=>
-  {
-  try {
-    const res  = await getAll();
-    console.log(res);
-    setjobs(res)
-  } catch (error) {
-    console.error("Error fetching the Jobs");
-    
-  }
+
+  useEffect(() => {
+    const getJobs = async () => {
+      try {
+        const res = await getAll();
+        console.log(res);
+        setjobs(res)
+      } catch (error) {
+        console.error("Error fetching the Jobs");
+      }
+    };
+    getJobs();
+  }, [])
+
+  const handleApplyNow = (job) => {
+    setSelectedJob(job);
+    setShowApplyForm(true);
   };
-  getJobs();
-},[])
+
   return (
     <div className="min-h-screen pt-16">
       <Navbar />
@@ -221,7 +171,10 @@ useEffect(()=>{
                       <li key={reqIndex}>{req}</li>
                     ))}
                   </ul>
-                  <Button className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:opacity-90">
+                  <Button 
+                    className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:opacity-90"
+                    onClick={() => handleApplyNow(job)}
+                  >
                     Apply Now
                   </Button>
                 </motion.li>
@@ -269,6 +222,115 @@ useEffect(()=>{
         </div>
       </section>
       <Footer />
+
+      {/* Application Form Modal */}
+      <AnimatePresence>
+        {showApplyForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="bg-white rounded-lg p-8 max-w-lg w-full m-4 shadow-xl"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Apply for {selectedJob?.title}</h2>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowApplyForm(false)}
+                >
+                  <X className="h-6 w-6" />
+                </Button>
+              </div>
+
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setShowApplyForm(false);
+                }}
+              >
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      placeholder="Enter your full name"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="Enter your phone number"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="resume">Resume (PDF only)</Label>
+                    <div className="mt-1 flex items-center">
+                      <Input
+                        id="resume"
+                        type="file"
+                        accept=".pdf"
+                        required
+                        className="block w-full text-sm text-gray-500
+                          file:mr-4 file:py- file:px-4 
+                          file:rounded-full file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-[var(--color-primary)]/10 
+                          file:text-[var(--color-primary)]
+                          hover:file:bg-[var(--color-primary)]/20
+                          focus:outline-none focus:ring-2
+                          focus:ring-[var(--color-primary)]/20
+                          cursor-pointer"
+                      />
+                    </div>
+                    <p className="mt-1 text-sm text-gray-500">Please upload your resume in PDF format</p>
+                  </div>
+
+                  <div className="flex justify-end space-x-4 mt-6">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowApplyForm(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/90"
+                    >
+                      Submit Application
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

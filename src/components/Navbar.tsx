@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { Menu, X, ChevronDown, ArrowRight, ArrowLeft } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowRight, ArrowLeft, ChevronDownCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useProjects } from "@/hooks/useProjects";
+import { useServices } from "@/hooks/useServices";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -33,6 +35,28 @@ const Navbar = () => {
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const [dynamicServices, setDynamicServices] = useState([]);
+  const [dynamicProjects, setDynamicProjects] = useState([]);
+  const { getAllProjects } = useProjects();
+  const { getAll: getAllServices } = useServices();
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+
+  useEffect(() => {
+    const fetchDropdownData = async () => {
+      try {
+        const [projectsData, servicesData] = await Promise.all([
+          getAllProjects(),
+          getAllServices()
+        ]);
+        setDynamicProjects(projectsData);
+        setDynamicServices(servicesData);
+      } catch (error) {
+        console.error('Error fetching dropdown data:', error);
+      }
+    };
+
+    fetchDropdownData();
+  }, []);
 
   const shouldShowDropdown = (itemName: string) => {
     return (itemName === "Services" || itemName === "Projects") && dropdownOpen === itemName;
@@ -51,21 +75,39 @@ const Navbar = () => {
     setIsOpen(false); // Close mobile menu if open
   };
 
+  // Add scroll handler for submenu
+  const handleSubmenuScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const element = e.currentTarget;
+    const isScrollable = element.scrollHeight > element.clientHeight;
+    const isBottom = Math.abs(element.scrollHeight - element.clientHeight - element.scrollTop) < 1;
+    setShowScrollIndicator(isScrollable && !isBottom);
+  };
+
+  // Add effect to check scrollability when submenu opens
+  useEffect(() => {
+    if (activeSubmenu) {
+      const submenuElement = document.querySelector('.submenu-content');
+      if (submenuElement) {
+        const isScrollable = submenuElement.scrollHeight > submenuElement.clientHeight;
+        setShowScrollIndicator(isScrollable);
+      }
+    }
+  }, [activeSubmenu]);
+
   return (
     <>
       <motion.nav
         animate={false}
         className="fixed top-0 left-0 right-0 z-[49]"
       >
-        {/* Main Navbar Container */}
-        <div className="bg-gradient-to-b from-white/80 to-white/60 backdrop-blur-xl border-b border-white/20 xl:shadow-lg">
+        <div className="bg-gradient-to-b from-white/80 to-white/60 backdrop-blur-xl border-b border-white/20 xl:shadow-lg relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 h-20 xl:h-20 relative">
             <div className="flex items-center justify-between h-full">
               {/* Logo - Updated to use image */}
               <motion.div 
                 className="flex items-center"
                 animate={{ 
-                  y: shouldAnimateLogo(dropdownOpen) ? 40 : 0,
+                  y: shouldAnimateLogo(dropdownOpen) ? 20 : 0,
                   scale: shouldAnimateLogo(dropdownOpen) ? 1.1 : 1
                 }}
                 transition={{ duration: 0.3 }}
@@ -84,14 +126,12 @@ const Navbar = () => {
                 {navItems.map((item) => (
                   <div
                     key={item.name}
-                    className="relative"
+                    className="relative group"
                     onMouseEnter={() => {
-                      setDropdownOpen(item.name);
-                      setNavExpanded(true);
-                    }}
-                    onMouseLeave={() => {
-                      setDropdownOpen(null);
-                      setNavExpanded(false);
+                      if (item.dropdown) {
+                        setDropdownOpen(item.name);
+                        setNavExpanded(true);
+                      }
                     }}
                   >
                     <Link
@@ -111,13 +151,15 @@ const Navbar = () => {
                     </Link>
                   </div>
                 ))}
-                <Button 
-                  size="sm" 
-                  className="bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90"
-                  onClick={handleGetStarted}
-                >
-                  Get Started
-                </Button>
+                {/* <div>
+                  <Button 
+                    size="sm" 
+                    className="bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90"
+                    onClick={handleGetStarted}
+                  >
+                    Get Started
+                  </Button>
+                </div> */}
               </div>
 
               {/* Mobile/Tablet menu button - Updated consistent sizing */}
@@ -148,6 +190,11 @@ const Navbar = () => {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="hidden xl:block w-full bg-white/95 backdrop-blur-xl shadow-lg border-b border-white/20"
+              onMouseLeave={() => {
+                setDropdownOpen(null);
+                setNavExpanded(false);
+              }}
+              onMouseEnter={() => setNavExpanded(true)}
             >
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="grid grid-cols-4 gap-8">
@@ -159,36 +206,64 @@ const Navbar = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <Link to="/" className="text-xl font-bold text-[var(--color-primary)] mb-4 block">
-                        {/* RecursivePareto */}
+                        {dropdownOpen === "Services" ? "Our Services" : "Our Projects"}
                       </Link>
                       <p className="text-[var(--color-gray-600)] text-sm">
-                        Empowering businesses with innovative software solutions
+                        {dropdownOpen === "Services" 
+                          ? "Empowering businesses with innovative solutions" 
+                          : "Discover our latest success stories"}
                       </p>
                     </motion.div>
                   </div>
 
                   {/* Dynamic Dropdown Content - Only for Services and Projects */}
                   <div className="col-span-3">
-                    {navItems.find(item => shouldShowDropdown(item.name))?.dropdown && (
-                      <div className="grid grid-cols-3 gap-6">
-                        {navItems.find(item => item.name === dropdownOpen)?.dropdown?.map((option, i) => (
-                          <motion.div
-                            key={option}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.1 }}
-                            className="p-4 rounded-lg hover:bg-[var(--color-primary)]/5"
-                          >
-                            <Link
-                              to="#"
-                              className="text-[var(--color-gray-700)] hover:text-[var(--color-primary)] transition-colors block"
+                    <div 
+                      className="grid grid-cols-3 gap-6 max-h-[50vh] overflow-y-auto pr-4 custom-scrollbar"
+                      style={{
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: 'var(--color-primary) transparent'
+                      }}
+                    >
+                      {dropdownOpen === "Services" 
+                        ? dynamicServices.map((service, i) => (
+                            <motion.div
+                              key={service.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: i * 0.1 }}
+                              className="p-4 rounded-lg hover:bg-[var(--color-primary)]/5 cursor-pointer"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                navigate(`/services/${service.id}`);
+                                setDropdownOpen(null);
+                              }}
                             >
-                              {option}
-                            </Link>
-                          </motion.div>
-                        ))}
-                      </div>
-                    )}
+                              <div>
+                                <h3 className="font-medium">{service.title}</h3>
+                                <p className="text-sm text-gray-500">{service.description}</p>
+                              </div>
+                            </motion.div>
+                          ))
+                        : dynamicProjects.map((project, i) => (
+                            <motion.div
+                              key={project.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: i * 0.1 }}
+                              className="p-4 rounded-lg hover:bg-[var(--color-primary)]/5 cursor-pointer"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                navigate(`/projects/${project.id}`);
+                                setDropdownOpen(null);
+                              }}
+                            >
+                              <h3 className="font-medium">{project.name}</h3>
+                              <p className="text-sm text-gray-500 line-clamp-2">{project.description}</p>
+                            </motion.div>
+                          ))
+                      }
+                    </div>
                   </div>
                 </div>
               </div>
@@ -267,30 +342,69 @@ const Navbar = () => {
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}
                     transition={{ duration: 0.3 }}
-                    className="absolute inset-0 bg-white overflow-y-auto"
+                    className="absolute inset-0 bg-white"
                   >
-                    <div className="p-4">
-                      <div
-                        className="flex items-center gap-2 px-4 py-4 text-[var(--color-primary)] font-medium mb-2 touch-none"
-                        onClick={() => setActiveSubmenu(null)}
-                      >
-                        <ArrowLeft className="h-5 w-5" />
-                        Back to Menu
-                      </div>
-                      <div className="space-y-1">
-                        {navItems.find(item => item.name === activeSubmenu)?.dropdown?.map((subItem) => (
-                          <Link
-                            key={subItem}
-                            to="#"
-                            className="block px-4 py-4 text-base font-medium text-[var(--color-gray-700)] hover:bg-[var(--color-primary)]/5 rounded-md"
-                            onClick={() => {
-                              setActiveSubmenu(null);
-                              setIsOpen(false);
-                            }}
-                          >
-                            {subItem}
-                          </Link>
-                        ))}
+                    <div 
+                      className="submenu-content h-full overflow-y-auto pb-16" // Add padding bottom to prevent content hiding behind the arrow
+                      onScroll={handleSubmenuScroll}
+                    >
+                      <div className="p-4">
+                        <div
+                          className="flex items-center gap-2 px-4 py-4 text-[var(--color-primary)] font-medium mb-2 touch-none"
+                          onClick={() => setActiveSubmenu(null)}
+                        >
+                          <ArrowLeft className="h-5 w-5" />
+                          Back to Menu
+                        </div>
+                        <div className="space-y-1">
+                          {activeSubmenu === "Services" 
+                            ? dynamicServices.map((service) => (
+                                <div
+                                  key={service.id}
+                                  className="block px-4 py-4 text-base font-medium text-[var(--color-gray-700)] hover:bg-[var(--color-primary)]/5 rounded-md cursor-pointer"
+                                  onClick={() => {
+                                    navigate(`/services/${service.id}`);
+                                    setActiveSubmenu(null);
+                                    setIsOpen(false);
+                                  }}
+                                >
+                                  <h3 className="font-medium">{service.title}</h3>
+                                  <p className="text-sm text-gray-500 line-clamp-1">{service.description}</p>
+                                </div>
+                              ))
+                            : activeSubmenu === "Projects"
+                              ? dynamicProjects.map((project) => (
+                                  <div
+                                    key={project.id}
+                                    className="block px-4 py-4 text-base font-medium text-[var(--color-gray-700)] hover:bg-[var(--color-primary)]/5 rounded-md cursor-pointer"
+                                    onClick={() => {
+                                      navigate(`/projects/${project.id}`);
+                                      setActiveSubmenu(null);
+                                      setIsOpen(false);
+                                    }}
+                                  >
+                                    <h3 className="font-medium">{project.name}</h3>
+                                    <p className="text-sm text-gray-500 line-clamp-1">{project.description}</p>
+                                  </div>
+                                ))
+                              : null
+                          }
+                        </div>
+
+                        {/* Scroll Indicator */}
+                        <AnimatePresence>
+                          {showScrollIndicator && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: 10 }}
+                              transition={{ duration: 0.2 }}
+                              className="fixed bottom-24 right-4 text-[var(--color-primary)] animate-bounce bg-white/80 rounded-full shadow-lg p-1"
+                            >
+                              <ChevronDownCircle className="h-6 w-6" />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     </div>
                   </motion.div>
