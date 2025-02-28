@@ -76,20 +76,18 @@ const Projects = () => {
                       </div>
                       <div className="p-6">
                         <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
-                        <p className="text-[var(--color-gray-600)] mb-4">{project.description}</p>
-                        {project.technologies ? (
+                        <p className="text-[var(--color-gray-600)] mb-4 line-clamp-2">{project.overview || project.description}</p>
+                        {project.technologies && (
                           <div className="flex flex-wrap gap-2">
                             {project.technologies.map((tech) => (
                               <span
                                 key={tech}
-                                className="text-sm px-3 py-1 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] bg-[var(--color-secondary)]/10"
+                                className="text-sm px-3 py-1 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)]"
                               >
                                 {tech}
                               </span>
                             ))}
                           </div>
-                        ) : (
-                          <>no technologies</>
                         )}
                       </div>
                     </div>

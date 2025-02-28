@@ -10,10 +10,10 @@ const navItems = [
   { name: "Home", href: "/" },
   { name: "Services", href: "/services", dropdown: ["Custom Software Development", "Digital Transformation and Automation", "Cloud Solutions & Hosting Services", "Data Analytics", "IT Consulting", "24/7 Support"] },
   { name: "Projects", href: "/projects", dropdown: ["E-Commerce Platform Redesign", "Healthcare Management System", "Financial Analytics Dashboard", "Social Media App", "IoT Smart Home System", "Online Learning Platform"] },
-  { name: "Investors", href: "/investors", mobileHidden: true }, // Add mobileHidden property
+  // { name: "Investors", href: "/investors", mobileHidden: true },
   { name: "Careers", href: "/careers" },
   { name: "About Us", href: "/about" },
-  { name: "Contact Us", href: "/contact", mobileHidden: true }, // Added mobileHidden property
+  { name: "Contact Us", href: "/contact", mobileHidden: true },
 ];
 
 const menuItemVariants = {
