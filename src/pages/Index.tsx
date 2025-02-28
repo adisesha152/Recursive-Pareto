@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Code, Rocket, Users, Zap, CheckCircle2, MessageSquare, ArrowRight as ArrowRightIcon, BrainCircuit, Timer, Target, BarChart3, Laptop, ChevronDown, ChevronUp, Heart, Star, Globe } from "lucide-react";
+import { ArrowRight, Code, Rocket, Users, Zap, CheckCircle2, MessageSquare, ArrowRight as ArrowRightIcon, BrainCircuit, Timer, Target, BarChart3, Laptop, ChevronDown, ChevronUp, Heart, Star, Globe, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import "../styles/globals.css";
 import { useNavigate } from "react-router-dom";
 import { useTestimonals } from "@/hooks/useTestimonals";
+import useEmblaCarousel from 'embla-carousel-react';
+import type { EmblaCarouselType } from 'embla-carousel';
 
 const Index = () => {
   const [testimonials,settestimonials] = useState([])
@@ -14,6 +16,7 @@ const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 const {getAll} = useTestimonals();
+const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' });
 
   useEffect(()=>{
     const testimonial = async ()=>{
@@ -41,6 +44,14 @@ const {getAll} = useTestimonals();
 
   const handleLearnMore = () => {
     navigate('/about');
+  };
+
+  const scrollPrev = () => {
+    if (emblaApi) emblaApi.scrollPrev();
+  };
+
+  const scrollNext = () => {
+    if (emblaApi) emblaApi.scrollNext();
   };
 
   return (
@@ -345,33 +356,63 @@ const {getAll} = useTestimonals();
               Feedback from our Esteemed Clients
             </motion.p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={testimonial.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card rounded-xl p-6 relative"
-              >
-                <MessageSquare className="h-8 w-8 text-[var(--color-primary)]/20 absolute top-6 right-6" />
-                <p className="text-[var(--color-gray-600)] mb-6 italic">"{testimonial.quote}"</p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full overflow-hidden">
-                    <img
-                      src={testimonial.avatar}
-                      alt={testimonial.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold">{testimonial.name}</h4>
-                    <p className="text-sm text-[var(--color-gray-600)]">{testimonial.position}</p>
-                  </div>
+
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+              {testimonials.map((testimonial, index) => (
+                <div 
+                  key={index} 
+                  className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.33%] pl-4"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="glass-card rounded-xl p-6 relative m-4"
+                  >
+                    <MessageSquare className="h-8 w-8 text-[var(--color-primary)]/20 absolute top-6 right-6" />
+                    <p className="text-[var(--color-gray-600)] mb-6 italic">"{testimonial.quote}"</p>
+                    <div className="flex items-center gap-4">
+                      {/* Fixed size container for avatar */}
+                      <div className="w-12 h-12 shrink-0 rounded-full overflow-hidden">
+                        <img
+                          src={testimonial.avatar}
+                          alt={testimonial.name}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      {/* Text content with proper wrapping */}
+                      <div className="min-w-0 flex-1">
+                        <h4 className="font-semibold truncate">{testimonial.name}</h4>
+                        <p className="text-sm text-[var(--color-gray-600)] ">{testimonial.position}</p>
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
-              </motion.div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Updated Navigation Buttons */}
+          <div className="flex justify-center gap-4 mt-8">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={scrollPrev}
+              className="rounded-full w-10 h-10 touch-manipulation"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={scrollNext}
+              className="rounded-full w-10 h-10 touch-manipulation"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </section>
@@ -845,103 +886,103 @@ const {getAll} = useTestimonals();
   );
 };
 
-const services = [
-  {
-    title: "Custom Software Development",
-    description:
-      "Tailored solutions designed to meet your specific business requirements and objectives.",
-    icon: Code,
-  },
-  {
-    title: "Digital Transformation and Automation",
-    description:
-      "Strategic guidance and implementation to modernize your business processes.",
-    icon: Zap,
-  },
-  {
-    title: "Cloud Solutions & Hosting Services", 
-    description:
-      "Scalable and secure cloud infrastructure to power your digital operations.",
-    icon: Laptop,
-  },
-  {
-    title: "Data Analytics",
-    description:
-      "Transform your data into actionable insights for better decision-making.",
-    icon: BarChart3,
-  },
-  {
-    title: "IT Consulting",
-    description:
-      "Expert advice and strategies to optimize your technology investments.",
-    icon: BrainCircuit,
-  },
-  {
-    title: "24/7 Support",
-    description:
-      "Round-the-clock technical support to ensure your systems run smoothly.",
-    icon: Users,
-  },
-];
+// const services = [
+//   {
+//     title: "Custom Software Development",
+//     description:
+//       "Tailored solutions designed to meet your specific business requirements and objectives.",
+//     icon: Code,
+//   },
+//   {
+//     title: "Digital Transformation and Automation",
+//     description:
+//       "Strategic guidance and implementation to modernize your business processes.",
+//     icon: Zap,
+//   },
+//   {
+//     title: "Cloud Solutions & Hosting Services", 
+//     description:
+//       "Scalable and secure cloud infrastructure to power your digital operations.",
+//     icon: Laptop,
+//   },
+//   {
+//     title: "Data Analytics",
+//     description:
+//       "Transform your data into actionable insights for better decision-making.",
+//     icon: BarChart3,
+//   },
+//   {
+//     title: "IT Consulting",
+//     description:
+//       "Expert advice and strategies to optimize your technology investments.",
+//     icon: BrainCircuit,
+//   },
+//   {
+//     title: "24/7 Support",
+//     description:
+//       "Round-the-clock technical support to ensure your systems run smoothly.",
+//     icon: Users,
+//   },
+// ];
 
-const projects = [
-  {
-    title: "E-Commerce Platform Redesign",
-    description: "Complete transformation of an online retail platform, improving user experience and increasing sales by 150%.",
-    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
-    technologies: ["React", "Node.js", "AWS", "MongoDB"],
-  },
-  {
-    title: "Healthcare Management System",
-    description: "Innovative solution for managing patient records, appointments, and medical data with strict security compliance.",
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-    technologies: ["TypeScript", "Azure", "PostgreSQL", "Docker"],
-  },
-];
+// const projects = [
+//   {
+//     title: "E-Commerce Platform Redesign",
+//     description: "Complete transformation of an online retail platform, improving user experience and increasing sales by 150%.",
+//     image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+//     technologies: ["React", "Node.js", "AWS", "MongoDB"],
+//   },
+//   {
+//     title: "Healthcare Management System",
+//     description: "Innovative solution for managing patient records, appointments, and medical data with strict security compliance.",
+//     image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+//     technologies: ["TypeScript", "Azure", "PostgreSQL", "Docker"],
+//   },
+// ];
 
-const process = [
-  {
-    title: "Discovery",
-    description: "Understanding your business needs and objectives",
-    icon: Target,
-  },
-  {
-    title: "Planning",
-    description: "Developing a comprehensive project roadmap",
-    icon: BrainCircuit,
-  },
-  {
-    title: "Development",
-    description: "Building your solution with cutting-edge technology",
-    icon: Code,
-  },
-  {
-    title: "Launch & Support",
-    description: "Deployment and ongoing maintenance",
-    icon: Rocket,
-  },
-];
+// const process = [
+//   {
+//     title: "Discovery",
+//     description: "Understanding your business needs and objectives",
+//     icon: Target,
+//   },
+//   {
+//     title: "Planning",
+//     description: "Developing a comprehensive project roadmap",
+//     icon: BrainCircuit,
+//   },
+//   {
+//     title: "Development",
+//     description: "Building your solution with cutting-edge technology",
+//     icon: Code,
+//   },
+//   {
+//     title: "Launch & Support",
+//     description: "Deployment and ongoing maintenance",
+//     icon: Rocket,
+//   },
+// ];
 
-const testimonials = [
-  {
-    quote: "The team's expertise and dedication transformed our business processes, delivering exceptional results.",
-    name: "Sarah Johnson",
-    position: "CEO, TechCorp",
-    avatar: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
-  },
-  {
-    quote: "Outstanding service and technical expertise. They truly understand business needs.",
-    name: "Michael Chen",
-    position: "CTO, InnovateTech",
-    avatar: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
-  },
-  {
-    quote: "Professional, responsive, and delivered beyond our expectations.",
-    name: "Emily Roberts",
-    position: "Product Manager, NextGen",
-    avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-  },
-];
+// const testimonials = [
+//   {
+//     quote: "The team's expertise and dedication transformed our business processes, delivering exceptional results.",
+//     name: "Sarah Johnson",
+//     position: "CEO, TechCorp",
+//     avatar: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+//   },
+//   {
+//     quote: "Outstanding service and technical expertise. They truly understand business needs.",
+//     name: "Michael Chen",
+//     position: "CTO, InnovateTech",
+//     avatar: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+//   },
+//   {
+//     quote: "Professional, responsive, and delivered beyond our expectations.",
+//     name: "Emily Roberts",
+//     position: "Product Manager, NextGen",
+//     avatar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+//   },
+// ];
 
 const benefits = [
   [
@@ -980,32 +1021,32 @@ const benefits = [
   ],
 ];
 
-const faqs = [
-  {
-    question: "What types of businesses do you work with?",
-    answer: "We work with businesses of all sizes across various industries, from startups to enterprise-level organizations. Our solutions are tailored to meet your specific needs and goals.",
-  },
-  {
-    question: "How long does a typical project take to complete?",
-    answer: "Project timelines vary depending on scope and complexity. A typical project can range from 2-6 months, but we'll provide a detailed timeline during our initial consultation.",
-  },
-  {
-    question: "What technologies do you specialize in?",
-    answer: "We specialize in modern web and mobile technologies, cloud solutions, AI/ML, and enterprise software development. Our tech stack is constantly evolving to meet industry demands.",
-  },
-  {
-    question: "Do you provide ongoing support after project completion?",
-    answer: "Yes, we offer comprehensive post-launch support and maintenance packages to ensure your solution continues to perform optimally and evolve with your business needs.",
-  },
-  {
-    question: "How do you ensure project security and confidentiality?",
-    answer: "We implement industry-leading security measures and follow strict data protection protocols. All our projects are covered by NDAs, and we comply with international security standards.",
-  },
-  {
-    question: "What makes your solutions different from others?",
-    answer: "Our solutions are custom-built for your specific needs, scalable, and future-proof. We focus on delivering long-term value through innovation and quality.",
-  },
-];
+// const faqs = [
+//   {
+//     question: "What types of businesses do you work with?",
+//     answer: "We work with businesses of all sizes across various industries, from startups to enterprise-level organizations. Our solutions are tailored to meet your specific needs and goals.",
+//   },
+//   {
+//     question: "How long does a typical project take to complete?",
+//     answer: "Project timelines vary depending on scope and complexity. A typical project can range from 2-6 months, but we'll provide a detailed timeline during our initial consultation.",
+//   },
+//   {
+//     question: "What technologies do you specialize in?",
+//     answer: "We specialize in modern web and mobile technologies, cloud solutions, AI/ML, and enterprise software development. Our tech stack is constantly evolving to meet industry demands.",
+//   },
+//   {
+//     question: "Do you provide ongoing support after project completion?",
+//     answer: "Yes, we offer comprehensive post-launch support and maintenance packages to ensure your solution continues to perform optimally and evolve with your business needs.",
+//   },
+//   {
+//     question: "How do you ensure project security and confidentiality?",
+//     answer: "We implement industry-leading security measures and follow strict data protection protocols. All our projects are covered by NDAs, and we comply with international security standards.",
+//   },
+//   {
+//     question: "What makes your solutions different from others?",
+//     answer: "Our solutions are custom-built for your specific needs, scalable, and future-proof. We focus on delivering long-term value through innovation and quality.",
+//   },
+// ];
 
 const coreServices = [
   "Mobile App Development",
@@ -1016,16 +1057,16 @@ const coreServices = [
   "Ongoing Support & Maintenance"
 ];
 
-const about = {
-  features: [
-    "10+ Years of Industry Experience",
-    "100+ Successful Projects Delivered",
-    "24/7 Technical Support",
-    "Award-winning Development Team",
-    "Industry-leading Security Standards",
-    "Continuous Innovation & Learning",
-  ],
-};
+// const about = {
+//   features: [
+//     "10+ Years of Industry Experience",
+//     "100+ Successful Projects Delivered",
+//     "24/7 Technical Support",
+//     "Award-winning Development Team",
+//     "Industry-leading Security Standards",
+//     "Continuous Innovation & Learning",
+//   ],
+// };
 
 const teamMembers = [
   {

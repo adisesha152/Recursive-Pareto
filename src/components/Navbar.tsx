@@ -412,10 +412,11 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
               
-            {/* Bottom Buttons - Updated for smaller mobile sizes */}
+            {/* Bottom Buttons - Updated to show both buttons */}
             <div className="px-8 py-6 border-t border-gray-200">
-              <div className="grid grid-cols-2 gap-4">
-                <Button 
+              <div className="w-full">
+              {/* <div className="grid grid-cols-2 gap-4"> */}
+                {/* <Button 
                   className="w-full py-4 text-base sm:text-lg bg-[var(--color-primary)]/10 text-[var(--color-primary)] 
                             hover:bg-[var(--color-primary)]/20 border-2 border-[var(--color-primary)]
                             flex items-center justify-center h-[50px] sm:h-[60px]"
@@ -425,7 +426,7 @@ const Navbar = () => {
                   }}
                 >
                   Investors
-                </Button>
+                </Button> */}
                 <Button 
                   className="w-full py-4 text-base sm:text-lg bg-[var(--color-primary)] text-white 
                             hover:bg-[var(--color-primary)]/90

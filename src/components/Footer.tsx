@@ -1,10 +1,29 @@
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useServices } from "@/hooks/useServices";
+import { useEffect, useState } from "react";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const [services, setServices] = useState([]);
+  const { getAll } = useServices();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const allServices = await getAll();
+        // Take only the first 6 services
+        setServices(allServices.slice(0, 6));
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  const currentYear = new Date().getFullYear();
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -45,8 +64,8 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
+          {/* Quick Links - Updated with hidden class for mobile */}
+          <div className="hidden sm:block">
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
@@ -108,24 +127,18 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Services - Updated to use dynamic data */}
           <div className="sm:block hidden">
             <h3 className="text-lg font-semibold mb-4">Our Services</h3>
             <ul className="space-y-2">
-              {[
-                "Custom Software Development",
-                "Digital Transformation",
-                "Cloud Solutions",
-                "IT Consulting",
-                "Mobile App Development",
-              ].map((service) => (
-                <li key={service}>
-                  <a
-                    href="#services"
-                    className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
+              {services.map((service) => (
+                <li key={service.id}>
+                  <button
+                    onClick={() => navigate(`/services/${service.id}`)}
+                    className="text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors text-left"
                   >
-                    {service}
-                  </a>
+                    {service.title}
+                  </button>
                 </li>
               ))}
             </ul>
