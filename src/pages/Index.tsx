@@ -371,7 +371,7 @@ const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' });
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     className="glass-card rounded-xl p-6 relative m-4"
                   >
-                    <MessageSquare className="h-8 w-8 text-[var(--color-primary)]/20 absolute top-6 right-6" />
+                    {/* <MessageSquare className="h-8 w-8 text-[var(--color-primary)]/20 absolute top-6 right-6" /> */}
                     <p className="text-[var(--color-gray-600)] mb-6 italic">"{testimonial.quote}"</p>
                     <div className="flex items-center gap-4">
                       {/* Fixed size container for avatar */}
